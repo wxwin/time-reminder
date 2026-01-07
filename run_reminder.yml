@@ -1,0 +1,27 @@
+name: Daily Reminder
+
+on:
+  schedule:
+    # 每天早上 8:00 (UTC 时间是 0:00) 运行
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 允许手动触发测试
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Run script
+        env:
+          SCT_KEY: ${{ secrets.SCT_KEY }} # 在 Settings -> Secrets 中配置
+        run: python main.py
